@@ -33,7 +33,7 @@ Note that both use [Serilog](https://serilog.net/) to log exceptions to each pro
 
 Run NorthScript.sql to create and populate a database used in both projects.
 
-# Bonus 
+# Working from a solution 
 
 If there are many projects consider the following.
 
@@ -54,3 +54,28 @@ Written with .NET Core 6
 # .NET Core 5
 
 The code supplied was first tested with .NET Core 5 prior to being used in this article so those still using .NET Core 5 can use this too.
+
+# Runtime exception used
+
+Using NuGet package `Microsoft.Data.SqlClient` 5 and above assumes encryption.
+
+Using a standard connection string shown below will fail as in code.
+
+```
+Data Source=.\\SQLEXPRESS;Initial Catalog=NorthWind2022;integrated security=True;
+```
+
+A quick fix is to use the following.
+
+```
+Data Source=.\\SQLEXPRESS;Initial Catalog=NorthWind2022;integrated security=True;Encrypt=False
+```
+
+**From Microsoft docs on** `Encrypt`
+
+When `true`, SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed. Recognized values are `true`, `false`, `yes`, and `no`. For more information, see [Connection String Syntax](https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/connection-string-syntax).
+
+Beginning in .NET Framework 4.5, when `TrustServerCertificate` is false and `Encrypt` is true, the server name (or IP address) in a SQL Server SSL certificate must exactly match the server name (or IP address) specified in the connection string. Otherwise, the connection attempt will fail.
+
+
+
