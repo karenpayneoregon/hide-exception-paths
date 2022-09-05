@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Threading.Tasks;
 using HidePathInExceptions.Classes;
 using Serilog.Events;
 
@@ -20,7 +22,8 @@ namespace HidePathInExceptions
             }
             catch (Exception localException)
             {
-                Console.WriteLine(localException);
+                //Console.WriteLine(localException);
+                ExceptionHelpers.ColorStandard(localException);
                 Logger.Write(LogEventLevel.Error,localException,"Woops");
                 var test = localException.FlattenHierarchy();
             }

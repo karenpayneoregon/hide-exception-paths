@@ -1,4 +1,6 @@
-﻿namespace HidePathInExceptions.Classes;
+﻿using System;
+
+namespace HidePathInExceptions.Classes;
 
 public class GlobalStuff
 {

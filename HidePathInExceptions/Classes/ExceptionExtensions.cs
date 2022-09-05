@@ -1,4 +1,7 @@
-﻿namespace HidePathInExceptions.Classes
+﻿using System;
+using System.Collections.Generic;
+
+namespace HidePathInExceptions.Classes
 {
     public static class ExceptionExtensions
     {
@@ -21,15 +24,19 @@
         {
             var rVal = new List<T>();
 
-            Action<Exception> lambda = null;
+            Action<Exception> lambda = null!;
+
             lambda = (x) =>
             {
-                var xt = x as T;
-                if (xt != null)
+                if (x is T xt)
+                {
                     rVal.Add(xt);
+                }
 
                 if (x.InnerException != null)
-                    lambda(x.InnerException);
+                {
+                    lambda!(x.InnerException);
+                }
 
                 if (x is AggregateException ax)
                 {
