@@ -37,7 +37,7 @@ internal partial class Program
                     }
                 });
 
-            AnsiConsole.MarkupLine("[cyan]finished[/]");
+
 
         }
         catch (Exception localException)
