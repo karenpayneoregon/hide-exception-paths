@@ -5,25 +5,25 @@ using Serilog;
 using Serilog.Core;
 
 // ReSharper disable once CheckNamespace
-namespace HidePathInExceptions
+namespace HidePathInExceptions;
+
+partial class Program
 {
-    partial class Program
+    private static Logger Logger;
+
+    [ModuleInitializer]
+    public static void Init()
     {
-        private static Logger Logger;
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", true, true)
+            .Build();
 
-        [ModuleInitializer]
-        public static void Init()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
+        Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
 
-            Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+        Console.Title = "Exception without path code sample with Serilog/Spectre.Console";
 
-            Console.Title = "Exception without path code sample with Serilog/Spectre.Console";
-            WindowUtility.SetConsoleWindowPosition(WindowUtility.AnchorWindow.Center);
-        }
+        WindowUtility.SetConsoleWindowPosition(WindowUtility.AnchorWindow.Center);
     }
 }

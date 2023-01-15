@@ -1,53 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HidePathInExceptions.Classes
+namespace HidePathInExceptions.Classes;
+
+public static class ExceptionExtensions
 {
-    public static class ExceptionExtensions
+    public static IEnumerable<Exception> FlattenHierarchy(this Exception ex)
     {
-        public static IEnumerable<Exception> FlattenHierarchy(this Exception ex)
+        if (ex == null)
         {
-            if (ex == null)
+            throw new ArgumentNullException(nameof(ex));
+        }
+
+        var innerException = ex;
+
+        do
+        {
+            yield return innerException;
+            innerException = innerException.InnerException;
+        }
+
+        while (innerException != null);
+    }
+    public static IEnumerable<T> InnerExceptions<T>(this Exception ex) where T : Exception
+    {
+        var list = new List<T>();
+
+        Action<Exception> lambda = null!;
+
+        lambda = (x) =>
+        {
+            if (x is T xt)
             {
-                throw new ArgumentNullException(nameof(ex));
+                list.Add(xt);
             }
 
-            var innerException = ex;
-            do
+            if (x.InnerException != null)
             {
-                yield return innerException;
-                innerException = innerException.InnerException;
+                lambda!(x.InnerException);
             }
-            while (innerException != null);
-        }
-        public static IEnumerable<T> InnerExceptions<T>(this Exception ex) where T : Exception
-        {
-            var rVal = new List<T>();
 
-            Action<Exception> lambda = null!;
-
-            lambda = (x) =>
+            if (x is AggregateException ax)
             {
-                if (x is T xt)
-                {
-                    rVal.Add(xt);
-                }
+                foreach (var aix in ax.InnerExceptions)
+                    lambda!(aix);
+            }
+        };
 
-                if (x.InnerException != null)
-                {
-                    lambda!(x.InnerException);
-                }
+        lambda(ex);
 
-                if (x is AggregateException ax)
-                {
-                    foreach (var aix in ax.InnerExceptions)
-                        lambda!(aix);
-                }
-            };
-
-            lambda(ex);
-
-            return rVal;
-        }
+        return list;
     }
 }

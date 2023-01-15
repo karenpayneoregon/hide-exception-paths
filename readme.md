@@ -49,11 +49,10 @@ Create a file named [Directory.Build.props](https://docs.microsoft.com/en-us/vis
 
 # Code samples
 
-Written with .NET Core 6
+~~Written with .NET Core 6~~
 
-# .NET Core 5
+Writtem with EF Core 7
 
-The code supplied was first tested with .NET Core 5 prior to being used in this article so those still using .NET Core 5 can use this too.
 
 # Runtime exception used
 

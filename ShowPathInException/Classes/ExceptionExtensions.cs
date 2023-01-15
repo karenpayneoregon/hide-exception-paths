@@ -1,52 +1,53 @@
-﻿namespace ShowPathInException.Classes
+﻿namespace ShowPathInException.Classes;
+
+public static class ExceptionExtensions
 {
-    public static class ExceptionExtensions
+    public static IEnumerable<Exception> FlattenHierarchy(this Exception exception)
     {
-        public static IEnumerable<Exception> FlattenHierarchy(this Exception exception)
+        if (exception == null)
         {
-            if (exception == null)
+            throw new ArgumentNullException(nameof(exception));
+        }
+
+        var innerException = exception;
+
+        do
+        {
+            yield return innerException;
+            innerException = innerException.InnerException;
+        }
+
+        while (innerException != null);
+    }
+    public static IEnumerable<T> InnerExceptions<T>(this Exception exception) where T : Exception
+    {
+        var list = new List<T>();
+
+        Action<Exception> lambdaAction = null!;
+        lambdaAction = (current) =>
+        {
+            var item = current as T;
+            if (item != null)
             {
-                throw new ArgumentNullException(nameof(exception));
+                list.Add(item);
             }
 
-            var innerException = exception;
-            do
+            if (current.InnerException != null)
             {
-                yield return innerException;
-                innerException = innerException.InnerException;
+                lambdaAction!(current.InnerException);
             }
-            while (innerException != null);
-        }
-        public static IEnumerable<T> InnerExceptions<T>(this Exception exception) where T : Exception
-        {
-            var list = new List<T>();
 
-            Action<Exception> lambdaAction = null!;
-            lambdaAction = (current) =>
+            if (current is AggregateException aggregateException)
             {
-                var item = current as T;
-                if (item != null)
+                foreach (var currentException in aggregateException.InnerExceptions)
                 {
-                    list.Add(item);
+                    lambdaAction!(currentException);
                 }
+            }
+        };
 
-                if (current.InnerException != null)
-                {
-                    lambdaAction!(current.InnerException);
-                }
+        lambdaAction(exception);
 
-                if (current is AggregateException aggregateException)
-                {
-                    foreach (var currentException in aggregateException.InnerExceptions)
-                    {
-                        lambdaAction!(currentException);
-                    }
-                }
-            };
-
-            lambdaAction(exception);
-
-            return list;
-        }
+        return list;
     }
 }
