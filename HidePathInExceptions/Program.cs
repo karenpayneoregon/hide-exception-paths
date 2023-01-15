@@ -20,7 +20,7 @@ internal partial class Program
                 .Columns(
                     new TaskDescriptionColumn(), 
                     new PercentageColumn(), 
-                    new SpinnerColumn())
+                    new SpinnerColumn().CompletedText("Done"))
                 .StartAsync(async ctx =>
                 {
 
@@ -29,7 +29,7 @@ internal partial class Program
                     while (!ctx.IsFinished)
                     {
 
-                        await foreach (var item in DataOperations.GetData(true, false))
+                        await foreach (var item in DataOperations.GetData(true, true))
                         {
                             builder.AppendLine(item);
                             task1.Increment(1);
