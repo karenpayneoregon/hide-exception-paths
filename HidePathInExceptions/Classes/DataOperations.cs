@@ -32,7 +32,11 @@ public class DataOperations
         }
 
  
-        var statement = "SELECT TOP 100 P.ProductName FROM OrderDetails AS OD INNER JOIN Products AS P ON OD.ProductID = P.ProductID";
+        var statement = """
+                            SELECT TOP 100 P.ProductName 
+                            FROM OrderDetails AS OD INNER JOIN Products AS P ON OD.ProductID = P.ProductID
+                        """;
+
         await using var cn = new SqlConnection(connectionString);
         await using var cmd = new SqlCommand { Connection = cn, CommandText = statement };
 

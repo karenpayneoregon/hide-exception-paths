@@ -29,7 +29,7 @@ internal partial class Program
                     while (!ctx.IsFinished)
                     {
 
-                        await foreach (var item in DataOperations.GetData(true, true))
+                        await foreach (var item in DataOperations.GetData(true, false))
                         {
                             builder.AppendLine(item);
                             task1.Increment(1);

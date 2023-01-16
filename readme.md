@@ -1,5 +1,7 @@
 # Hiding path for runtime exceptions
 
+![Title](assets/title.png)
+
 When an unhandled or handled (using try-catch) exception is thrown in an application usually the exception is sent to a log file and may display the exception during development in Visual Studio output window or if working with a console application display in the console window.
 
 When inspecting an exception in a log file for the stack trace we see not only the location of the exception but the full path too, as shown in figure 1. If seeing the full path is annoying than there is a solution that when implemented will appear as in figure 2.
